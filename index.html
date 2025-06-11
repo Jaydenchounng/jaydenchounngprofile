@@ -11,6 +11,8 @@
       --dark-blue: #0A2463;
       --light-gray: #E0E0E0;
       --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --transition: all 0.4s ease; /* 新增过渡变量 */
+      --card-gap: 35px; /* 项目卡片间距变量 */
     }
     
     * {
@@ -55,14 +57,14 @@
     }
     
     h1 {
-      font-size: 3rem;
+      font-size: clamp(2rem, 5vw, 3rem); /* 响应式字体大小 */
       margin-bottom: 1rem;
       position: relative;
       z-index: 2;
     }
     
     h2 {
-      font-size: 2.2rem;
+      font-size: clamp(1.5rem, 3vw, 2.2rem); /* 响应式字体大小 */
       color: var(--dark-blue);
       margin: 40px 0 20px;
       position: relative;
@@ -89,33 +91,74 @@
       margin-bottom: 1rem;
     }
     
-    /* Navigation */
+    /* 响应式导航栏 */
     .nav-bar {
       background-color: white;
       box-shadow: var(--shadow);
       position: sticky;
       top: 0;
       z-index: 100;
-      transition: all 0.3s ease;
+      transition: var(--transition);
     }
     
     .nav-container {
       display: flex;
-      justify-content: center;
-      padding: 15px 0;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
     }
     
+    /* 导航栏Logo或标题（如果有） */
+    .nav-logo {
+      color: var(--dark-blue);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    /* 移动端菜单按钮 */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 30px;
+      height: 24px;
+      cursor: pointer;
+    }
+    
+    .menu-toggle span {
+      height: 3px;
+      width: 100%;
+      background-color: var(--dark-blue);
+      border-radius: 3px;
+      transition: var(--transition);
+    }
+    
+    /* 移动端菜单按钮动画 */
+    .menu-toggle.active span:nth-child(1) {
+      transform: translateY(10px) rotate(45deg);
+    }
+    
+    .menu-toggle.active span:nth-child(2) {
+      opacity: 0;
+    }
+    
+    .menu-toggle.active span:nth-child(3) {
+      transform: translateY(-10px) rotate(-45deg);
+    }
+    
+    /* 导航列表 - 桌面端 */
     .nav-list {
       display: flex;
       list-style: none;
-      gap: 25px;
+      gap: clamp(15px, 3vw, 25px);
+      transition: var(--transition);
     }
     
     .nav-list a {
       text-decoration: none;
       color: var(--dark-blue);
       font-weight: 500;
-      transition: color 0.3s, transform 0.2s;
+      transition: var(--transition);
       padding: 8px 12px;
       border-radius: 4px;
     }
@@ -125,14 +168,50 @@
       transform: translateY(-3px);
     }
     
+    /* 移动端导航菜单 */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: flex;
+      }
+      
+      .nav-list {
+        position: fixed;
+        top: 60px;
+        right: -100%;
+        width: 70%;
+        height: 100vh;
+        background-color: white;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: -5px 0 10px rgba(0,0,0,0.1);
+        z-index: 99;
+      }
+      
+      .nav-list.active {
+        right: 0;
+      }
+      
+      .nav-list a {
+        padding: 15px;
+        border-bottom: 1px solid var(--light-gray);
+      }
+    }
+    
     /* Uniform Box Design */
     .card {
       background: white;
       border-radius: 12px;
-      padding: 25px;
+      padding: clamp(20px, 3vw, 25px); /* 响应式卡片内边距 */
       margin-bottom: 30px;
       box-shadow: var(--shadow);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: var(--transition);
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     .card:hover {
@@ -155,7 +234,7 @@
       width: 100%;
       border-radius: 8px;
       margin: 15px 0;
-      height: 200px;
+      height: clamp(150px, 25vw, 200px); /* 响应式图片高度 */
       object-fit: cover;
     }
     
@@ -165,7 +244,7 @@
       font-weight: 600;
       display: inline-block;
       margin-top: 10px;
-      transition: color 0.3s ease;
+      transition: var(--transition);
     }
     
     .card-link:hover {
@@ -178,40 +257,40 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 40px;
+      gap: clamp(30px, 5vw, 40px); /* 响应式间距 */
       margin: 60px 0 80px;
     }
     
     .profile-pic {
-      flex: 1 1 300px;
+      flex: 1 1 clamp(280px, 50%, 350px); /* 响应式宽度 */
       text-align: center;
     }
     
     .profile-pic img {
-      width: 280px;
-      height: 280px;
+      width: clamp(200px, 70%, 280px); /* 响应式图片大小 */
+      height: clamp(200px, 70%, 280px);
       object-fit: cover;
-      border-radius: 50%;
+      border-radius: 50%; /* 标准圆形 */
       box-shadow: var(--shadow);
     }
     
     .profile-info {
-      flex: 1 1 calc(50% - 20px);
+      flex: 1 1 clamp(300px, 50%, 100%); /* 响应式宽度 */
     }
     
     /* Skills Section */
     .skills-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(clamp(200px, 30%, 250px), 1fr)); /* 响应式网格 */
+      gap: clamp(15px, 3vw, 25px); /* 响应式间距 */
       margin: 30px 0;
     }
     
     /* Photo Gallery */
     .photo-gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(clamp(180px, 30%, 250px), 1fr)); /* 响应式网格 */
+      gap: clamp(15px, 3vw, 25px); /* 响应式间距 */
       margin: 30px 0;
     }
     
@@ -221,36 +300,51 @@
       overflow: hidden;
       box-shadow: var(--shadow);
       text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: var(--transition);
+    }
+    
+    .gallery-card.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     .gallery-card img {
       width: 100%;
-      height: 200px;
+      height: clamp(150px, 25vw, 200px); /* 响应式图片高度 */
       object-fit: cover;
     }
     
     /* Projects Grid */
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 25px;
+      grid-template-columns: repeat(auto-fill, minmax(clamp(280px, 45%, 350px), 1fr)); /* 响应式网格 */
+      gap: clamp(20px, 5vw, 35px); /* 响应式间距 */
       margin: 30px 0;
     }
     
     /* Awards & Certificates */
     .awards-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 25px;
+      grid-template-columns: repeat(auto-fill, minmax(clamp(250px, 30%, 350px), 1fr)); /* 响应式网格 */
+      gap: clamp(15px, 3vw, 25px); /* 响应式间距 */
       margin-top: 30px;
     }
     
     .award-item {
       background: white;
       border-radius: 12px;
-      padding: 25px;
+      padding: clamp(20px, 3vw, 25px); /* 响应式内边距 */
       box-shadow: var(--shadow);
-      transition: transform 0.3s ease;
+      transition: var(--transition);
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .award-item.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     
     .award-item:hover {
@@ -261,6 +355,8 @@
       width: 100%;
       border-radius: 8px;
       margin: 15px 0;
+      height: clamp(150px, 25vw, 200px); /* 响应式图片高度 */
+      object-fit: cover;
     }
     
     /* Contact Section */
@@ -270,14 +366,14 @@
     
     .contact-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(clamp(280px, 45%, 500px), 1fr)); /* 响应式网格 */
+      gap: clamp(20px, 5vw, 35px); /* 响应式间距 */
     }
     
     .contact-card {
       background: white;
       border-radius: 12px;
-      padding: 30px;
+      padding: clamp(20px, 3vw, 30px); /* 响应式内边距 */
       box-shadow: var(--shadow);
     }
     
@@ -289,7 +385,7 @@
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: var(--transition);
       width: 100%;
     }
     
@@ -297,74 +393,44 @@
       background: #64B5F6;
     }
     
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: clamp(20px, 3vw, 30px); /* 响应式位置 */
+      right: clamp(20px, 3vw, 30px);
+      width: clamp(40px, 5vw, 50px); /* 响应式大小 */
+      height: clamp(40px, 5vw, 50px);
+      background-color: var(--pale-sky-blue);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      z-index: 99;
+    }
+    
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .back-to-top:hover {
+      background-color: #64B5F6;
+      transform: translateY(-3px);
+    }
+    
     /* Footer */
     footer {
       background: var(--dark-blue);
       color: white;
       text-align: center;
-      padding: 40px 20px;
-      margin-top: 80px;
-    }
-    
-    /* Responsive Design */
-    @media (max-width: 992px) {
-      h1 {
-        font-size: 2.5rem;
-      }
-      
-      h2 {
-        font-size: 1.8rem;
-      }
-      
-      .profile-section {
-        flex-direction: column;
-        gap: 30px;
-      }
-      
-      .profile-info {
-        flex: 1 1 100%;
-      }
-      
-      .awards-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 2rem;
-      }
-      
-      .nav-list {
-        gap: 15px;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      
-      .skills-grid, 
-      .projects-grid,
-      .photo-gallery,
-      .awards-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    
-    @media (max-width: 576px) {
-      header {
-        padding: 60px 20px 40px;
-      }
-      
-      h1 {
-        font-size: 1.8rem;
-      }
-      
-      h2 {
-        font-size: 1.5rem;
-      }
-      
-      .card, .contact-card, .award-item {
-        padding: 20px;
-      }
+      padding: clamp(30px, 5vw, 40px) 20px; /* 响应式内边距 */
+      margin-top: clamp(50px, 8vw, 80px); /* 响应式外边距 */
     }
   </style>
 </head>
@@ -379,7 +445,18 @@
   <nav class="nav-bar">
     <div class="container">
       <div class="nav-container">
-        <ul class="nav-list">
+        <!-- 导航栏标题（已修改为全名） -->
+        <div class="nav-logo">Chou Chon Chong</div>
+        
+        <!-- 移动端菜单按钮 -->
+        <div class="menu-toggle" id="menuToggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        
+        <!-- 导航列表 -->
+        <ul class="nav-list" id="navList">
           <li><a href="#profile">Profile</a></li>
           <li><a href="#skills">Skills</a></li>
           <li><a href="#statement">Statement</a></li>
@@ -739,7 +816,7 @@
           <form>
             <input type="text" placeholder="Your Name" class="card" style="margin-bottom: 15px;">
             <input type="email" placeholder="Your Email" class="card" style="margin-bottom: 15px;">
-            <textarea placeholder="Your Message" rows="4" class="card" style="margin-bottom: 15px;"></textarea>
+            <textarea placeholder="Your Message" rows="5" class="card" style="margin-bottom: 15px;"></textarea>
             <button type="submit" class="btn">Send Message</button>
           </form>
         </div>
@@ -747,9 +824,73 @@
     </section>
   </div>
   
+  <!-- Back to Top Button -->
+  <a href="#" class="back-to-top" id="backToTop">↑</a>
+  
   <!-- Footer -->
   <footer>
-    <p>&copy; 2025 Jayden Chou. All rights reserved.</p>
+    <p>&copy; 2024 Jayden Chou. All rights reserved.</p>
   </footer>
+  
+  <!-- JavaScript -->
+  <script>
+    // 导航栏菜单切换
+    const menuToggle = document.getElementById('menuToggle');
+    const navList = document.getElementById('navList');
+    
+    menuToggle.addEventListener('click', () => {
+      menuToggle.classList.toggle('active');
+      navList.classList.toggle('active');
+    });
+    
+    // 点击导航链接后关闭菜单（移动端）
+    const navLinks = document.querySelectorAll('.nav-list a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 768) {
+          menuToggle.classList.remove('active');
+          navList.classList.remove('active');
+        }
+      });
+    });
+    
+    // 滚动显示/隐藏回到顶部按钮
+    const backToTopButton = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTopButton.classList.add('visible');
+      } else {
+        backToTopButton.classList.remove('visible');
+      }
+    });
+    
+    // 回到顶部动画
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // 滚动动画（元素进入视口时显示）
+    const animateOnScroll = () => {
+      const cards = document.querySelectorAll('.card, .gallery-card, .award-item');
+      
+      cards.forEach(card => {
+        const cardPosition = card.getBoundingClientRect().top;
+        const screenPosition = window.innerHeight / 1.2;
+        
+        if (cardPosition < screenPosition) {
+          card.classList.add('visible');
+        }
+      });
+    };
+    
+    // 初始加载时检查元素位置
+    window.addEventListener('load', animateOnScroll);
+    // 滚动时检查元素位置
+    window.addEventListener('scroll', animateOnScroll);
+  </script>
 </body>
 </html>
